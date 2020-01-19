@@ -60,5 +60,4 @@ N = 2
 print(f"Input: {l_list.print()}, N={N}")
 
 solution(l_list.head, N)
-# l_list.delete(N)
 print(f"Output: {l_list.print()}")
