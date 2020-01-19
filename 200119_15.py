@@ -11,43 +11,42 @@ class LinkedList:
         self.num_of_node = 0
 
     def append(self, node):
-        if self.num_of_node == 0:
+        if self.head is None:
             self.head = node
+            self.current = self.head
+            self.before = self.head
         else:
-            current = self.head
-            for _ in range(self.num_of_node - 1):
-                current = current.next
-            current.next = node
+            self.current.next = node
+            self.current = self.current.next
 
         self.num_of_node += 1
 
-    def delete(self, node_num):
-        before = self.head
-        current = self.head
-        for i in range(self.num_of_node - node_num):
-            before = current
-            current = current.next
-
-        if current.next is None:
-            before.next = None
-            current = None
-        else:
-            before.next = current.next
-            current = None
-
-        self.num_of_node -= 1
-
     def print(self):
-        if self.num_of_node == 0:
+        if self.head is None:
             return "null"
 
         current = self.head
         print_str = f"{current.data}"
-        for _ in range(self.num_of_node - 1):
+
+        while current.next is not None:
             current = current.next
             print_str += f" > {current.data}"
 
         return print_str
+
+
+def solution(head, n):
+    head1 = head
+    head2 = head
+
+    for i in range(n):
+        head1 = head1.next
+
+    while head1.next is not None:
+        head1 = head1.next
+        head2 = head2.next
+
+    head2.next = head2.next.next
 
 
 l_list = LinkedList()
@@ -60,5 +59,6 @@ l_list.append(Node(5))
 N = 2
 print(f"Input: {l_list.print()}, N={N}")
 
-l_list.delete(N)
+solution(l_list.head, N)
+# l_list.delete(N)
 print(f"Output: {l_list.print()}")
