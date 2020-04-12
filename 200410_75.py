@@ -8,7 +8,6 @@ def solution(input_list):
     max_value = -sys.maxsize - 1
     max_temp = -sys.maxsize - 1
     for index in range(len(input_list)):
-
         max_temp = max_temp + input_list[index]
         if input_list[index] > max_temp:
             max_temp = input_list[index]
