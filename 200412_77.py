@@ -1,43 +1,46 @@
-# 11/10/2019
-import copy
+# 11/06/2019
 
 
-def solution(input_list):
-    n = len(input_list)
-    inc_list = [[] for _ in range(len(input_list))]
-    dec_list = [[] for _ in range(len(input_list))]
+def solution(input_list, cost):
+    def countPath(m, n, cost):
+        if cost < 0:
+            return 0
 
-    inc_list[0] = [input_list[0]]
-    for i in range(1, n):
-        for j in range(i):
-            if input_list[i] > input_list[j] and len(inc_list[j]) > len(inc_list[i]):
-                inc_list[i] = copy.deepcopy(inc_list[j])
+        if m == 0 and n == 0:
+            if input_list[0][0] - cost == 0:
+                return 1
+            else:
+                return 0
 
-        inc_list[i].append(input_list[i])
+        key = f'{m} | {n} | {cost}'
 
-    dec_list[n - 1] = [input_list[-1]]
-    for i in range(n - 2, -1, -1):
-        for j in range(n - 1, i - 1, -1):
-            if input_list[i] > input_list[j] and len(dec_list[j]) > len(dec_list[i]):
-                dec_list[i] = copy.deepcopy(dec_list[j])
+        if key not in result_key:
+            if m == 0:
+                result_key[key] = countPath(0, n - 1, cost - input_list[m][n])
+            elif n == 0:
+                result_key[key] = countPath(m - 1, 0, cost - input_list[m][n])
+            else:
+                result_key[key] = countPath(m - 1, n, cost - input_list[m][n]) + \
+                                  countPath(m, n - 1, cost - input_list[m][n])
 
-        dec_list[i].insert(0, input_list[i])
+        return result_key[key]
 
-    max_len = 0
-    result_list = list()
-    for index in range(n):
-        temp_list = inc_list[index] + dec_list[index][1:]
-        if len(temp_list) > max_len:
-            max_len = len(temp_list)
-            result_list = temp_list
+    result_key = dict()
+    m = len(input_list) - 1
+    n = len(input_list[0]) - 1
 
-    return result_list
+    return countPath(m, n, cost)
 
 
-Input_list1 = [4, 2, 5, 9, 7, 6, 10, 3, 1]
-Input_list2 = [1, 2, 3, 4, 5]
-Input_list3 = [5, 4, 3, 2, 1, 2, 3, 2]
-print(f'Input: {Input_list1}')
+Input_list = [[4, 7, 1, 6],
+              [5, 7, 3, 9],
+              [3, 2, 1, 2],
+              [7, 1, 6, 3]]
+Cost = 25
+print(f'Input: mat = {Input_list[0]}')
+for i in Input_list[1:]:
+    print(f'\t\t\t {i}')
+print(f'\t   cost = {Cost}')
 
-result = solution(Input_list1)
+result = solution(Input_list, Cost)
 print(f'Output: {result}')
